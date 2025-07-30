@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANIKANTA - Personal Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom Colors based on the image */
+        :root {
+            --color-dark-primary: #1e1e1e; /* Main background */
+            --color-dark-secondary: #2c2c2c; /* Card backgrounds, deeper sections */
+            --color-text-light-gray: #b0b0b0; /* General body text */
+            --color-orange-accent: #ff8c00; /* Orange highlight */
+            --color-dark-border: #3a3a3a; /* Subtle borders */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Fallback to sans-serif if Inter is not loaded */
+            background-color: var(--color-dark-primary);
+            color: white;
+            /* Ensure body is not styled to interfere with scroll height */
+            margin: 0;
+            padding: 0;
+        }
+
+        .bg-dark-primary {
+            background-color: var(--color-dark-primary);
+        }
+        .bg-dark-secondary {
+            background-color: var(--color-dark-secondary);
+        }
+        .text-light-gray {
+            color: var(--color-text-light-gray);
+        }
+        .text-orange-accent {
+            color: var(--color-orange-accent);
+        }
+        .border-orange-accent {
+            border-color: var(--color-orange-accent);
+        }
+        .border-dark-border {
+            border-color: var(--color-dark-border);
+        }
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Custom colors for skill icons to fit dark theme, if specific shades are desired */
+        .icon-html { color: #E44D26; } /* HTML5 Red/Orange */
+        .icon-css { color: #264DE4; }  /* CSS3 Blue */
+        .icon-js { color: #F7DF1E; }   /* JavaScript Yellow */
+        .icon-node { color: #68A063; } /* Node.js Green */
+        .icon-python { color: #3776AB; } /* Python Blue */
+        /* Specific colors for new icons */
+        .icon-java { color: #007396; } /* Java Blue */
+        .icon-c { color: #A8B9CC; } /* C language gray/blue */
+
+
+        /* Style for active navigation link */
+        .top-nav-link.active {
+            color: var(--color-orange-accent);
+            border-bottom: 2px solid var(--color-orange-accent);
+        }
+
+        /* Specific styles for fixed layout adjustments */
+        @media (min-width: 1024px) { /* Applies only for large screens and up */
+            .main-content-wrapper {
+                margin-left: calc(25% + 2rem); /* Account for fixed sidebar width (1/4) + gap (2rem) */
+                width: calc(75% - 2rem); /* Remaining width minus gap */
+                padding-top: 5rem; /* Add some top padding when fixed */
+            }
+            .fixed-sidebar {
+                left: 2rem; /* Adjust this value for gap from left edge */
+                top: 8rem; /* Adjust this value for top edge */
+            }
+        }
+
+        /* --- New CSS for mobile specific header adjustment --- */
+        /* This will push the section content down so it's not hidden behind the fixed header */
+        section {
+            padding-top: 5rem; /* Default padding for all sections to account for header */
+            margin-top: -5rem; /* Negative margin to counteract the padding and keep original scroll position relative to document */
+            scroll-margin-top: 5rem; /* This is the modern, preferred way for scroll offset */
+        }
+
+        /* Adjust for smaller screens if header height is different */
+        @media (max-width: 1023px) {
+            header {
+                /* On smaller screens, the header might be taller or shorter */
+                /* Let's ensure it has a consistent height for the calc */
+                height: 70px; /* Example fixed height for mobile header, adjust as needed */
+            }
+            section {
+                /* Override scroll-margin-top for smaller screens if header height differs */
+                scroll-margin-top: 70px; /* Should match header height */
+                padding-top: 70px;
+                margin-top: -70px;
+            }
+        }
+
+        /* Debugging visual aid (REMOVE IN PRODUCTION) */
+        /* .debug-line {
+            position: fixed;
+            top: 70px; /* Should match your calculated header offset */
+            /* left: 0;
+            right: 0;
+            height: 2px;
+            background-color: lime;
+            z-index: 9999;
+        } */
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="fixed top-0 left-0 right-0 bg-dark-secondary z-50 py-4 shadow-lg rounded-xl">
+        <nav class="max-w-7xl mx-auto flex justify-end space-x-6 text-light-gray font-semibold text-lg px-8 lg:px-0">
+            <a href="#about" class="top-nav-link hover:text-white transition-colors duration-200" data-section="about">About</a>
+            <a href="#educational-details" class="top-nav-link hover:text-white transition-colors duration-200" data-section="educational-details">Educational Details</a>
+            <a href="#projects" class="top-nav-link hover:text-white transition-colors duration-200" data-section="projects">Projects</a>
+            <a href="#skills" class="top-nav-link hover:text-white transition-colors duration-200" data-section="skills">Skills</a>
+            <a href="#contact" class="top-nav-link hover:text-white transition-colors duration-200" data-section="contact">Contact</a>
+        </nav>
+    </header>
+
+    <div class="lg:flex relative min-h-screen">
+        <div class="lg:fixed lg:w-1/4 bg-dark-secondary rounded-xl p-6 shadow-xl z-40 lg:h-[calc(100vh-4rem)] overflow-y-auto mb-8 lg:mb-0 mx-auto max-w-sm w-full fixed-sidebar mt-24 lg:mt-0">
+            <div class="flex flex-col items-center mb-6">
+                <img src="https://i.postimg.cc/KYbKx0d0/Whats-App-Image-2025-07-28-at-18-44-56-82ec5318.jpg" alt="MANIKANTA" class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-dark-primary">
+                <h2 class="text-2xl font-bold">MANIKANTA</h2>
+                <span class="text-sm bg-dark-primary text-light-gray px-3 py-1 rounded-full mt-2">Aspiring Web Developer</span>
+            </div>
+
+            <div class="space-y-4 text-light-gray text-sm pb-6 border-b border-dark-border">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-dark-primary rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-envelope text-orange-accent"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-light-gray">EMAIL</div>
+                        <div class="font-medium">buddhamanikanta963@gmail.com</div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-dark-primary rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-phone-alt text-orange-accent"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-light-gray">PHONE</div>
+                        <div class="font-medium">+917670940682</div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-dark-primary rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-calendar-alt text-orange-accent"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-light-gray">BIRTHDAY</div>
+                        <div class="font-medium">May 15, 2005</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center space-x-4 mt-6">
+                <a href="#" class="text-light-gray hover:text-orange-accent transition-colors duration-200">
+                    <i class="fab fa-facebook-f text-lg"></i>
+                </a>
+                <a href="#" class="text-light-gray hover:text-orange-accent transition-colors duration-200">
+                    <i class="fab fa-twitter text-lg"></i>
+                </a>
+                <a href="#" class="text-light-gray hover:text-orange-accent transition-colors duration-200">
+                    <i class="fab fa-instagram text-lg"></i>
+                </a>
+                <a href="#" class="text-light-gray hover:text-orange-accent transition-colors duration-200">
+                    <i class="fab fa-linkedin-in text-lg"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content-wrapper p-4 lg:p-8 ml-auto">
+            <div class="right-content-area bg-dark-secondary rounded-xl p-8 shadow-xl relative z-10">
+                <section id="about" class="mb-10 pt-20">
+                    <h1 class="text-4xl font-bold mb-4">About Me</h1>
+                    <div class="h-1 w-16 bg-orange-accent mb-6 rounded-full"></div>
+                    <p class="text-light-gray leading-relaxed mb-4">
+                        I'm **Manikanta**, a passionate **B.Tech 3rd-year student** pursuing **Information Technology** at **Vignan Institute of Technology & Science (VITS), Hyderabad**. My journey into web development began with a fascination for how digital experiences come to life. I'm actively building my skills in creating responsive, efficient, and user-friendly web applications.
+                    </p>
+                    <p class="text-light-gray leading-relaxed">
+                        I am currently focusing on sharpening my **full-stack development** abilities and gaining hands-on experience through projects. I am constantly exploring new technologies and eager to apply innovative solutions to real-world challenges, with a strong commitment to learning and growth in the field.
+                    </p>
+                </section>
+
+                <section class="mb-10 pt-20">
+                    <h2 class="text-3xl font-bold mb-6">What I'm Doing</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-dark-primary p-6 rounded-lg flex items-start space-x-4 shadow-md">
+                            <div class="p-3 bg-dark-secondary rounded-lg flex items-center justify-center text-orange-accent text-2xl">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Web Design</h3>
+                                <p class="text-light-gray text-sm">Learning and applying modern, high-quality design principles for intuitive user interfaces.</p>
+                            </div>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg flex items-start space-x-4 shadow-md">
+                            <div class="p-3 bg-dark-secondary rounded-lg flex items-center justify-center text-orange-accent text-2xl">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Web Development</h3>
+                                <p class="text-light-gray text-sm">Developing functional and robust web applications with a focus on clean and efficient code.</p>
+                            </div>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg flex items-start space-x-4 shadow-md">
+                            <div class="p-3 bg-dark-secondary rounded-lg flex items-center justify-center text-orange-accent text-2xl">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Responsive Design</h3>
+                                <p class="text-light-gray text-sm">Ensuring web applications look and perform flawlessly across all devices and screen sizes.</p>
+                            </div>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg flex items-start space-x-4 shadow-md">
+                            <div class="p-3 bg-dark-secondary rounded-lg flex items-center justify-center text-orange-accent text-2xl">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Database Management</h3>
+                                <p class="text-light-gray text-sm">Working with databases to store and retrieve data efficiently for web applications.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="educational-details" class="mb-10 pt-20">
+                    <h2 class="text-3xl font-bold mb-6">Educational Details</h2>
+                    <div class="h-1 w-16 bg-orange-accent mb-6 rounded-full"></div>
+
+                    <div class="space-y-6 mb-8">
+                        <div class="bg-dark-primary p-5 rounded-lg shadow-md">
+                            <p class="text-orange-accent text-sm mb-1">2023 — Present</p>
+                            <h4 class="text-xl font-semibold mb-1">Bachelor of Technology in Information Technology</h4>
+                            <p class="text-light-gray text-sm">Vignan Institute of Technology & Science (VITS), Hyderabad</p>
+                            <p class="text-light-gray mt-2">Currently pursuing my B.Tech. Focus areas include core IT concepts, web technologies, and software development. <span class="font-bold text-white">Current CGPA: 7.55 / 10.0</span></p>
+                        </div>
+                        <div class="bg-dark-primary p-5 rounded-lg shadow-md">
+                            <p class="text-orange-accent text-sm mb-1">2021 — 2023</p>
+                            <h4 class="text-xl font-semibold mb-1">Intermediate (MPC)</h4>
+                            <p class="text-light-gray text-sm">Narayana Junior College, Hyderabad</p>
+                            <p class="text-light-gray mt-2">Completed intermediate education with a focus on Mathematics, Physics, and Chemistry. <span class="font-bold text-white">Percentage: 94.1%</span></p>
+                        </div>
+                        <div class="bg-dark-primary p-5 rounded-lg shadow-md">
+                            <p class="text-orange-accent text-sm mb-1">2020 — 2021</p>
+                            <h4 class="text-xl font-semibold mb-1">Secondary School Certificate (10th Class)</h4>
+                            <p class="text-light-gray text-sm">Mary Mother of Hope E/M High School, Suryapet</p>
+                            <p class="text-light-gray mt-2">Achieved foundational academic knowledge across various subjects. <span class="font-bold text-white">GPA: 9.8 / 10.0</span></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="projects" class="mb-10 pt-20">
+                    <h2 class="text-3xl font-bold mb-6">Projects</h2>
+                    <div class="h-1 w-16 bg-orange-accent mb-6 rounded-full"></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-dark-primary rounded-lg shadow-md overflow-hidden">
+                            <img src="https://via.placeholder.com/400x250/3d3d3d/b0b0b0?text=Project+1" alt="Project 1" class="w-full h-40 object-cover">
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2">E-commerce Platform Concept</h3>
+                                <p class="text-light-gray text-sm mb-3">A conceptual online store with basic product display and user interface design. (Currently in progress)</p>
+                                <a href="#" class="text-orange-accent hover:underline text-sm font-medium">View Project <i class="fas fa-arrow-right ml-1"></i></a>
+                                </div>
+                        </div>
+                        <div class="bg-dark-primary rounded-lg shadow-md overflow-hidden">
+                            <img src="https://via.placeholder.com/400x250/3d3d3d/b0b0b0?text=Project+2" alt="Project 2" class="w-full h-40 object-cover">
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2">Personal Blog Site</h3>
+                                <p class="text-light-gray text-sm mb-3">A responsive personal blog built with HTML, CSS, and JavaScript to showcase articles and ideas.</p>
+                                <a href="#" class="text-orange-accent hover:underline text-sm font-medium">View Project <i class="fas fa-arrow-right ml-1"></i></a>
+                                </div>
+                        </div>
+                        <div class="bg-dark-primary rounded-lg shadow-md overflow-hidden">
+                            <img src="https://via.placeholder.com/400x250/3d3d3d/b0b0b0?text=Project+3" alt="Project 3" class="w-full h-40 object-cover">
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2">Simple Calculator App</h3>
+                                <p class="text-light-gray text-sm mb-3">A basic calculator web application demonstrating fundamental JavaScript DOM manipulation.</p>
+                                <a href="#" class="text-orange-accent hover:underline text-sm font-medium">View Project <i class="fas fa-arrow-right ml-1"></i></a>
+                                </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="skills" class="mb-10 pt-20">
+                    <h2 class="text-3xl font-bold mb-6">My Skills</h2>
+                    <div class="h-1 w-16 bg-orange-accent mb-6 rounded-full"></div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-html5 text-5xl icon-html mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">HTML5</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-css3-alt text-5xl icon-css mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">CSS3</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-js-square text-5xl icon-js mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">JavaScript</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-java text-5xl icon-java mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">Java</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-python text-5xl icon-python mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">Python</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fas fa-c text-5xl icon-c mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">C</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fab fa-node-js text-5xl icon-node mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">Node.js</h3>
+                        </div>
+                        <div class="bg-dark-primary p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300 transform hover:scale-105">
+                            <i class="fas fa-database text-5xl text-blue-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-white">SQL</h3>
+                        </div>
+                    </div>
+                </section>
+
+
+                <section id="contact" class="mb-10 pt-20">
+                    <h2 class="text-3xl font-bold mb-6">Contact</h2>
+                    <div class="h-1 w-16 bg-orange-accent mb-6 rounded-full "></div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <p class="text-light-gray leading-relaxed">
+                                I'm always eager to connect! Whether it's for academic collaborations, discussing a potential project, or just a friendly chat about web development, feel free to reach out.
+                            </p>
+                            <div class="flex items-center space-x-4 bg-dark-primary p-4 rounded-lg shadow-md">
+                                <i class="fas fa-envelope text-orange-accent text-2xl"></i>
+                                <div>
+                                    <p class="text-sm text-light-gray">Email Me</p>
+                                    <a href="mailto:buddhamanikanta963@gmail.com" class="text-white font-medium hover:text-orange-accent">buddhamanikanta963@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 bg-dark-primary p-4 rounded-lg shadow-md">
+                                <i class="fas fa-phone-alt text-orange-accent text-2xl"></i>
+                                <div>
+                                    <p class="text-sm text-light-gray">Call Me</p>
+                                    <a href="tel:+917670940682" class="text-white font-medium hover:text-orange-accent">+917670940682</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.top-nav-link');
+        const header = document.querySelector('header');
+
+        // Function to get header height
+        function getHeaderHeight() {
+            // Use clientHeight for more reliable height without border/margin if present, but offsetHeight is usually fine
+            return header.offsetHeight;
+        }
+
+        // Variable to hold the ID of the section we are currently scrolling to
+        // This helps prevent interference between user scroll and programmatic scroll
+        let isProgrammaticScrolling = false;
+
+
+        // 1. Using CSS `scroll-margin-top` for native smooth scrolling offset
+        // This is the most robust and recommended way for fixed headers.
+        // The JavaScript for smooth scrolling then just needs to trigger the default anchor behavior.
+        // We'll keep the JS for highlighting, but the scroll logic will be simplified.
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default jump behavior initially
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    isProgrammaticScrolling = true; // Set flag
+                    // Use native scrollIntoView, CSS `scroll-margin-top` will handle the offset
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+
+                    // Update the URL hash without jumping
+                    history.pushState(null, null, targetId);
+
+                    // Allow time for scroll to finish, then unset flag and re-run highlight
+                    setTimeout(() => {
+                        isProgrammaticScrolling = false;
+                        highlightNavLink(); // Re-evaluate active link after scroll settles
+                    }, 600); // Increased delay for mobile smoothness
+                }
+            });
+        });
+
+
+        // 2. Optimized highlightNavLink function
+        // Uses Intersection Observer for more efficient and accurate active state detection.
+        // This is generally more performant than listening to 'scroll' events on mobile.
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: `-${getHeaderHeight()}px 0px -${window.innerHeight - getHeaderHeight() - 50}px 0px`, // Top margin for header offset, bottom margin for "in view" threshold
+            threshold: 0 // As soon as any part of the section is visible in the active zone
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            if (isProgrammaticScrolling) return; // Don't update active state if we are programmatically scrolling
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentSectionId = entry.target.id;
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.dataset.section === currentSectionId) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+
+            // Fallback for when no section is intersecting (e.g., at very top or very bottom)
+            const intersectingEntries = entries.filter(entry => entry.isIntersecting);
+            if (intersectingEntries.length === 0) {
+                // If at the very top, activate 'about'
+                if (window.scrollY < getHeaderHeight() + 20) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    document.querySelector('.top-nav-link[data-section="about"]').classList.add('active');
+                }
+                // If scrolled to the very bottom, activate 'contact'
+                else if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) { // 50px buffer for bottom
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    document.querySelector('.top-nav-link[data-section="contact"]').classList.add('active');
+                }
+            }
+
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Initial highlight on load
+        document.addEventListener('DOMContentLoaded', () => {
+             // Re-calculate observer options if header height might change on load
+            observerOptions.rootMargin = `-${getHeaderHeight()}px 0px -${window.innerHeight - getHeaderHeight() - 50}px 0px`;
+            highlightNavLink(); // Ensure 'about' is active on initial load if at top
+        });
+
+        // Recalculate observer on resize (important for responsive header height)
+        window.addEventListener('resize', () => {
+            // Disconnect and reconnect observer to update rootMargin
+            sections.forEach(section => sectionObserver.unobserve(section));
+            observerOptions.rootMargin = `-${getHeaderHeight()}px 0px -${window.innerHeight - getHeaderHeight() - 50}px 0px`;
+            sections.forEach(section => sectionObserver.observe(section));
+            highlightNavLink(); // Update active link after resize
+        });
+
+        // A simplified highlightNavLink for initial/manual calls if IntersectionObserver doesn't immediately catch it
+        // This is a fallback and can be less accurate than IO but useful for initial state.
+        function highlightNavLink() {
+            let currentSectionId = '';
+            const headerHeight = getHeaderHeight();
+            const scrollBuffer = 50; // Pixels buffer from the top of the viewport
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                // Check if the section's top is within the viewport, below the header, and its bottom is still visible
+                if (rect.top <= headerHeight + scrollBuffer && rect.bottom > headerHeight + scrollBuffer) {
+                    currentSectionId = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === currentSectionId) {
+                    link.classList.add('active');
+                }
+            });
+
+             // If nothing is explicitly intersecting the main "active" zone, check extremes
+            if (currentSectionId === '') {
+                // If at the very top of the page
+                if (window.scrollY < headerHeight + scrollBuffer) {
+                    document.querySelector('.top-nav-link[data-section="about"]').classList.add('active');
+                }
+                // If at the very bottom of the page
+                else if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) { // 50px buffer from bottom
+                    document.querySelector('.top-nav-link[data-section="contact"]').classList.add('active');
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>
