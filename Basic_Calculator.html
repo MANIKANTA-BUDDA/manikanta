@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Calculator - VHAST Tools</title>
+    <meta name="description" content="A full-page, colorful, and user-friendly basic calculator for all your everyday calculations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #2c3e50;
+            --nav-bg: #34495e;
+            --page-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --accent-color: #f1c40f;
+        }
+
+        [data-theme="dark"] {
+            --header-bg: #1a1a2e;
+            --nav-bg: #16213e;
+            --page-bg: #0f1624;
+            --card-bg: #1a1a2e;
+            --text-dark: #ffffff;
+            --text-light: #e0e0e0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === Header and Navigation === */
+        .header-container {
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .hero-banner {
+            background: var(--header-bg);
+            color: var(--text-light);
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-banner h1 { margin: 0; font-size: 2rem; }
+        .nav-bar {
+            background-color: var(--nav-bg);
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 15px;
+            padding: 5px 0;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-bar a:hover { color: var(--accent-color); }
+        
+        #theme-toggle {
+            background: none; border: 2px solid var(--text-light); color: var(--text-light);
+            font-size: 1.2rem; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        #theme-toggle:hover {
+            background-color: var(--accent-color); border-color: var(--accent-color);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* === Basic Calculator === */
+        .basic-calculator {
+            width: 380px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        #calc-display {
+            width: calc(100% - 30px);
+            height: 70px;
+            background-color: var(--page-bg);
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 3rem;
+            text-align: right;
+            padding: 0 15px;
+            box-sizing: border-box;
+            color: var(--text-dark);
+        }
+        .calc-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .calc-keys button {
+            height: 65px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+        }
+        .calc-keys button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        .calc-keys .operator { background-color: #f39c12; color: white; }
+        .calc-keys .clear { background-color: #e74c3c; color: white; }
+        .calc-keys .equal { background-color: #2ecc71; color: white; grid-row: span 2; height: auto; }
+        .calc-keys .zero { grid-column: span 2; }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="hero-banner">
+            <h1>Basic Calculator</h1>
+        </div>
+        <nav class="nav-bar">
+            <a href="index.html">Home</a>
+            <a href="budget_calculator.html">Budget Planner</a>
+            <a href="bmi_calculator.html">BMI Calculator</a>
+            <a href="electricity_calculator.html">Electricity</a>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="basic-calculator">
+            <input type="text" id="calc-display" readonly>
+            <div class="calc-keys">
+                <button class="clear" onclick="clearCalcDisplay()">AC</button>
+                <button onclick="deleteCalcChar()">DEL</button>
+                <button class="operator" onclick="appendToCalcDisplay('/')">÷</button>
+                <button class="operator" onclick="appendToCalcDisplay('*')">×</button>
+                <button onclick="appendToCalcDisplay('7')">7</button>
+                <button onclick="appendToCalcDisplay('8')">8</button>
+                <button onclick="appendToCalcDisplay('9')">9</button>
+                <button class="operator" onclick="appendToCalcDisplay('-')">-</button>
+                <button onclick="appendToCalcDisplay('4')">4</button>
+                <button onclick="appendToCalcDisplay('5')">5</button>
+                <button onclick="appendToCalcDisplay('6')">6</button>
+                <button class="operator" onclick="appendToCalcDisplay('+')">+</button>
+                <button onclick="appendToCalcDisplay('1')">1</button>
+                <button onclick="appendToCalcDisplay('2')">2</button>
+                <button onclick="appendToCalcDisplay('3')">3</button>
+                <button class="equal" onclick="calculateCalcResult()">=</button>
+                <button class="zero" onclick="appendToCalcDisplay('0')">0</button>
+                <button onclick="appendToCalcDisplay('.')">.</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const calcDisplay = document.getElementById('calc-display');
+
+        function appendToCalcDisplay(input) {
+            calcDisplay.value += input;
+        }
+
+        function clearCalcDisplay() {
+            calcDisplay.value = '';
+        }
+
+        function deleteCalcChar() {
+            calcDisplay.value = calcDisplay.value.slice(0, -1);
+        }
+
+        function calculateCalcResult() {
+            try {
+                const expression = calcDisplay.value.replace(/×/g, '*').replace(/÷/g, '/');
+                const result = eval(expression);
+                calcDisplay.value = result;
+            } catch (e) {
+                calcDisplay.value = 'Error';
+            }
+        }
+
+        // --- Theme Toggler Script ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+
+</body>
+</html>

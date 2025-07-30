@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Planner - VHAST Tools</title>
+    <meta name="description" content="Plan your finances by tracking your monthly income and expenses with this simple budget planner.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #2c3e50;
+            --nav-bg: #34495e;
+            --page-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --accent-color: #f1c40f;
+            --primary-color: #e74c3c;
+            --secondary-color: #c0392b;
+        }
+
+        [data-theme="dark"] {
+            --header-bg: #1a1a2e;
+            --nav-bg: #16213e;
+            --page-bg: #0f1624;
+            --card-bg: #1a1a2e;
+            --text-dark: #ffffff;
+            --text-light: #e0e0e0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* === Header and Navigation === */
+        .header-container {
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .hero-banner {
+            background: var(--header-bg);
+            color: var(--text-light);
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-banner h1 { margin: 0; font-size: 2rem; }
+        .nav-bar {
+            background-color: var(--nav-bg);
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-bar a:hover { color: var(--accent-color); }
+        
+        #theme-toggle {
+            background: none; border: 2px solid var(--text-light); color: var(--text-light);
+            font-size: 1.2rem; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        #theme-toggle:hover {
+            background-color: var(--accent-color); border-color: var(--accent-color);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* === Budget Calculator === */
+        .budget-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .form-section h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .calculate-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        .calculate-button:hover {
+            transform: scale(1.02);
+        }
+        
+        .results-display {
+            text-align: center;
+        }
+
+        .results-display h2 {
+            margin-top: 0;
+             color: var(--primary-color);
+        }
+        
+        .result-item {
+            background: var(--page-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .result-item span:first-child {
+            display: block;
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+        #balance {
+            font-size: 2rem;
+            border: 2px solid;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .budget-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="hero-banner">
+            <h1>Budget Planner</h1>
+        </div>
+        <nav class="nav-bar">
+            <a href="index.html">Home</a>
+            <a href="Basic_Calculator.html">Calculator</a>
+            <a href="bmi_calculator.html">BMI Calculator</a>
+            <a href="electricity_calculator.html">Electricity</a>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="budget-container">
+            <div class="form-section">
+                <h2>Your Monthly Finances</h2>
+                <form id="budget-form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="income">Total Monthly Income (₹)</label>
+                        <input type="number" id="income" placeholder="e.g., 50000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="housing">Housing (Rent/EMI) (₹)</label>
+                        <input type="number" id="housing" placeholder="e.g., 15000">
+                    </div>
+                    <div class="form-group">
+                        <label for="utilities">Utilities (Electricity, Water, etc.) (₹)</label>
+                        <input type="number" id="utilities" placeholder="e.g., 2500">
+                    </div>
+                    <div class="form-group">
+                        <label for="groceries">Groceries (₹)</label>
+                        <input type="number" id="groceries" placeholder="e.g., 8000">
+                    </div>
+                     <div class="form-group">
+                        <label for="transport">Transport (₹)</label>
+                        <input type="number" id="transport" placeholder="e.g., 3000">
+                    </div>
+                     <div class="form-group">
+                        <label for="other">Other Expenses (₹)</label>
+                        <input type="number" id="other" placeholder="e.g., 5000">
+                    </div>
+                    <button type="submit" id="calculate-btn" class="calculate-button">Calculate Budget</button>
+                </form>
+            </div>
+            <div class="results-display">
+                <h2>Summary</h2>
+                <div class="result-item">
+                    <span>Total Expenses</span>
+                    <span id="total-expenses">₹0</span>
+                </div>
+                <div class="result-item" id="balance">
+                    <span>Balance (Savings)</span>
+                    <span id="balance-amount">₹0</span>
+                </div>
+                 <p id="result-message" style="margin-top: 20px;"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', () => {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const housing = parseFloat(document.getElementById('housing').value) || 0;
+            const utilities = parseFloat(document.getElementById('utilities').value) || 0;
+            const groceries = parseFloat(document.getElementById('groceries').value) || 0;
+            const transport = parseFloat(document.getElementById('transport').value) || 0;
+            const other = parseFloat(document.getElementById('other').value) || 0;
+            
+            const totalExpenses = housing + utilities + groceries + transport + other;
+            const balance = income - totalExpenses;
+            
+            document.getElementById('total-expenses').textContent = `₹${totalExpenses.toFixed(2)}`;
+            document.getElementById('balance-amount').textContent = `₹${balance.toFixed(2)}`;
+            
+            const balanceEl = document.getElementById('balance');
+            const messageEl = document.getElementById('result-message');
+            
+            if (balance > 0) {
+                balanceEl.style.borderColor = '#2ecc71';
+                messageEl.textContent = "Great! You have a positive balance.";
+                messageEl.style.color = '#2ecc71';
+            } else if (balance < 0) {
+                balanceEl.style.borderColor = '#e74c3c';
+                messageEl.textContent = "Warning! Your expenses are higher than your income.";
+                 messageEl.style.color = '#e74c3c';
+            } else {
+                 balanceEl.style.borderColor = '#f39c12';
+                 messageEl.textContent = "You've broken even. Look for ways to save!";
+                 messageEl.style.color = '#f39c12';
+            }
+        });
+
+        // --- Theme Toggler Script ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+
+</body>
+</html>

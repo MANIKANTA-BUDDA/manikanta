@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHAST Calculator Tools</title>
+    <meta name="description" content="A suite of colorful and user-friendly calculators for your financial, health, and general needs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #2c3e50;
+            --nav-bg: #34495e;
+            --page-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --accent-color: #f1c40f;
+        }
+
+        [data-theme="dark"] {
+            --header-bg: #1a1a2e;
+            --nav-bg: #16213e;
+            --page-bg: #0f1624;
+            --card-bg: #1a1a2e;
+            --text-dark: #ffffff;
+            --text-light: #e0e0e0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* === Header and Navigation === */
+        .header-container {
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .hero-banner {
+            background: var(--header-bg);
+            color: var(--text-light);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .hero-banner h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .hero-banner p {
+            margin: 0;
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+        .nav-bar {
+            background-color: var(--nav-bg);
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 15px;
+            padding: 5px 0;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-bar a:hover {
+            color: var(--accent-color);
+        }
+        
+        #theme-toggle {
+            background: none;
+            border: 2px solid var(--text-light);
+            color: var(--text-light);
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #theme-toggle:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+
+        /* === Calculator Details Section (16:5 Ratio) === */
+        .calculator-showcase {
+            position: relative;
+            width: 100%;
+            padding-top: 31.25%; /* 5 / 16 = 0.3125 */
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            color: var(--text-light);
+        }
+        .calculator-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px;
+        }
+        .calculator-text {
+            max-width: 50%;
+        }
+        .calculator-text h2 {
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
+        }
+        .calculator-text p {
+            font-size: 1rem;
+            margin: 0 0 25px 0;
+            opacity: 0.9;
+        }
+        .key-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .key-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .key-features svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--header-bg);
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.3s;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Color Themes */
+        .basic-calc-showcase { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .budget-planner { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .bmi-calculator { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .unit-converter { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .electricity-calc { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+
+
+        /* === Basic Calculator Modal === */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            position: relative;
+        }
+        .basic-calculator {
+            width: 360px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+        }
+        #calc-display {
+            width: calc(100% - 30px);
+            height: 60px;
+            background-color: var(--page-bg);
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-align: right;
+            padding: 0 15px;
+            box-sizing: border-box;
+            color: var(--text-dark);
+        }
+        .calc-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .calc-keys button {
+            height: 60px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+        }
+        .calc-keys button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        .calc-keys .operator {
+            background-color: #f39c12;
+            color: white;
+        }
+        .calc-keys .clear {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .calc-keys .equal {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .close-modal-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="hero-banner">
+            <h1>VHAST Calculator Tools</h1>
+            <p>Quick, accurate, and user-friendly calculators for everyone</p>
+        </div>
+        <nav class="nav-bar">
+            <a onclick="toggleCalculatorModal()">Calculator</a>
+            <a href="budget_calculator.html">Budget Planner</a>
+            <a href="bmi_calculator.html">BMI Calculator</a>
+            <a href="electricity_calculator.html">Electricity</a>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- Basic Calculator Showcase -->
+        <section class="calculator-showcase basic-calc-showcase">
+            <div class="calculator-content">
+                <div class="calculator-text">
+                    <h2>Basic Calculator</h2>
+                    <p>For all your everyday calculations. Quick, simple, and always available with a single click in the navigation bar.</p>
+                    <ul class="key-features">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Standard Arithmetic Operations</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>Responsive and Easy to Use</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>Instant Access via Modal</li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Planner Showcase -->
+        <section class="calculator-showcase budget-planner">
+            <div class="calculator-content">
+                <div class="calculator-text">
+                    <h2>Budget Planner</h2>
+                    <p>Gain a clear view of your financial health. Track your income and expenses to make smarter financial decisions.</p>
+                    <ul class="key-features">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg> Income and Expense Tracking</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 1.5m1-1.5l-1-1.5m1 1.5l1 1.5m-1-1.5l1-1.5m-8.25 4.5h16.5M3.75 19.5h16.5"/></svg> Visual Spending Breakdown</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0H21m-9 12h5.25m-5.25 0h-1.5m1.5 0v-3m0 3l-1.5-1.5m1.5 1.5v-3.75l-1.5-1.5m-1.5 5.25v-3.75l-1.5-1.5m1.5 1.5H3.75m0 0L3 12h18l-1.25 6h-15.5Z" /></svg> Financial Goal Setting</li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- BMI Calculator Showcase -->
+        <section class="calculator-showcase bmi-calculator">
+            <div class="calculator-content">
+                <div class="calculator-text">
+                    <h2>BMI Calculator (Indian Units)</h2>
+                    <p>Assess your body mass index using feet, inches, and kg to understand your weight category and health.</p>
+                    <ul class="key-features">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Instant BMI Calculation</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg> Specialized for Indian Units</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg> Health Category Analysis</li>
+                    </ul>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Electricity Calculator Showcase -->
+        <section class="calculator-showcase electricity-calc">
+            <div class="calculator-content">
+                <div class="calculator-text">
+                    <h2>Electricity Cost Calculator</h2>
+                    <p>Estimate your electricity usage and costs by appliance to find opportunities for big savings on your monthly bill.</p>
+                    <ul class="key-features">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.25 4.5h13.5c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125H5.25A1.125 1.125 0 014.125 7.875V5.625A1.125 1.125 0 015.25 4.5z" /></svg> Detailed Appliance Library</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0H21m-9 12h5.25m-5.25 0h-1.5m1.5 0v-3m0 3l-1.5-1.5m1.5 1.5v-3.75l-1.5-1.5m-1.5 5.25v-3.75l-1.5-1.5m1.5 1.5H3.75m0 0L3 12h18l-1.25 6h-15.5Z" /></svg> Daily, Monthly & Yearly Costs</li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Customizable Power & Usage</li>
+                    </ul>
+                     
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Basic Calculator Modal -->
+    <div class="modal-overlay" id="calculator-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="toggleCalculatorModal()">×</button>
+            <div class="basic-calculator">
+                <input type="text" id="calc-display" readonly>
+                <div class="calc-keys">
+                    <button class="clear" onclick="clearCalcDisplay()">AC</button>
+                    <button onclick="deleteCalcChar()">DEL</button>
+                    <button class="operator" onclick="appendToCalcDisplay('/')">÷</button>
+                    <button class="operator" onclick="appendToCalcDisplay('*')">×</button>
+                    <button onclick="appendToCalcDisplay('7')">7</button>
+                    <button onclick="appendToCalcDisplay('8')">8</button>
+                    <button onclick="appendToCalcDisplay('9')">9</button>
+                    <button class="operator" onclick="appendToCalcDisplay('-')">-</button>
+                    <button onclick="appendToCalcDisplay('4')">4</button>
+                    <button onclick="appendToCalcDisplay('5')">5</button>
+                    <button onclick="appendToCalcDisplay('6')">6</button>
+                    <button class="operator" onclick="appendToCalcDisplay('+')">+</button>
+                    <button onclick="appendToCalcDisplay('1')">1</button>
+                    <button onclick="appendToCalcDisplay('2')">2</button>
+                    <button onclick="appendToCalcDisplay('3')">3</button>
+                    <button class="equal" rowspan="2" style="grid-row: span 2;" onclick="calculateCalcResult()">=</button>
+                    <button onclick="appendToCalcDisplay('0')" style="grid-column: span 2">0</button>
+                    <button onclick="appendToCalcDisplay('.')">.</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('calculator-modal');
+        const calcDisplay = document.getElementById('calc-display');
+
+        function toggleCalculatorModal() {
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function appendToCalcDisplay(input) {
+            calcDisplay.value += input;
+        }
+
+        function clearCalcDisplay() {
+            calcDisplay.value = '';
+        }
+
+        function deleteCalcChar() {
+            calcDisplay.value = calcDisplay.value.slice(0, -1);
+        }
+
+        function calculateCalcResult() {
+            try {
+                // Replace visual operators with functional ones for eval()
+                const expression = calcDisplay.value.replace(/×/g, '*').replace(/÷/g, '/');
+                const result = eval(expression);
+                calcDisplay.value = result;
+            } catch (e) {
+                calcDisplay.value = 'Error';
+            }
+        }
+        
+        // --- Theme Toggler Script ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+
+        // Apply saved theme on page load
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator (Indian Units) - VHAST Tools</title>
+    <meta name="description" content="Calculate your Body Mass Index (BMI) using Indian units (feet, inches, kg). Get instant results and understand your weight category.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #2c3e50;
+            --nav-bg: #34495e;
+            --page-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --accent-color: #f1c40f;
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+        }
+
+        [data-theme="dark"] {
+            --header-bg: #1a1a2e;
+            --nav-bg: #16213e;
+            --page-bg: #0f1624;
+            --card-bg: #1a1a2e;
+            --text-dark: #ffffff;
+            --text-light: #e0e0e0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* === Header and Navigation === */
+        .header-container {
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .hero-banner {
+            background: var(--header-bg);
+            color: var(--text-light);
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-banner h1 { margin: 0; font-size: 2rem; }
+        .nav-bar {
+            background-color: var(--nav-bg);
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-bar a:hover { color: var(--accent-color); }
+        
+        #theme-toggle {
+            background: none; border: 2px solid var(--text-light); color: var(--text-light);
+            font-size: 1.2rem; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        #theme-toggle:hover {
+            background-color: var(--accent-color); border-color: var(--accent-color);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* === BMI Calculator === */
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .calculator-card, .results-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .results-card {
+            position: sticky;
+            top: 20px;
+            text-align: center;
+        }
+        
+        .calculator-card h2 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .height-inputs { display: flex; gap: 15px; }
+        
+        .cta-button {
+            width: 100%; padding: 15px; border: none; cursor: pointer;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white; border-radius: 8px; font-weight: 600; font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+        .cta-button:hover { transform: translateY(-3px); }
+
+        .bmi-result-display { margin: 20px 0; }
+        #bmi-value { font-size: 4rem; font-weight: 700; color: var(--primary-color); }
+        #bmi-category { font-size: 1.5rem; font-weight: 600; margin-top: -10px; }
+
+        .bmi-gauge {
+            width: 100%; height: 25px;
+            background: linear-gradient(to right, #87CEFA, #32CD32, #FFD700, #FFA500, #FF4500);
+            border-radius: 15px; margin-top: 20px; position: relative;
+        }
+        #bmi-indicator {
+            position: absolute; top: -5px; width: 4px; height: 35px;
+            background-color: var(--text-dark); border-radius: 2px;
+            transform: translateX(-2px); transition: left 0.5s ease-out; left: 0%;
+        }
+        .gauge-labels { display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 5px; padding: 0 5px; }
+        #result-summary p { font-size: 1rem; line-height: 1.5; }
+        #result-summary span { font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .calculator-layout { grid-template-columns: 1fr; }
+            .results-card { position: static; margin-top: 20px; }
+        }
+        
+    </style>
+</head>
+<body>
+    <header class="header-container">
+        <div class="hero-banner">
+            <h1>BMI Calculator</h1>
+        </div>
+        <nav class="nav-bar">
+            <a href="index.html">Home</a>
+             <a href="Basic_Calculator.html">Calculator</a>
+            <a href="budget_calculator.html">Budget Planner</a>
+            <a href="electricity_calculator.html">Electricity</a>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main>
+            <div id="calculator" class="calculator-layout">
+                <section class="calculator-card">
+                    <form id="bmi-form" onsubmit="return false;">
+                        <h2>Check Your BMI</h2>
+                        
+                        <div class="form-group">
+                             <label>Height</label>
+                             <div class="height-inputs">
+                                 <input type="number" id="feet" placeholder="feet" required>
+                                 <input type="number" id="inches" placeholder="inches" required>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="kg-indian">Weight (kg)</label>
+                             <input type="number" id="kg-indian" placeholder="e.g., 70" required>
+                         </div>
+
+                        <button type="submit" id="calculate-btn" class="cta-button">Calculate BMI</button>
+                    </form>
+                </section>
+
+                <section class="results-card">
+                    <h2>Your Result</h2>
+                    <div class="bmi-result-display">
+                        <div id="bmi-value">--</div>
+                        <div id="bmi-category">Enter details to see result</div>
+                    </div>
+                    <div class="bmi-gauge">
+                        <div id="bmi-indicator"></div>
+                    </div>
+                    <div class="gauge-labels">
+                        <span>16</span>
+                        <span>18.5</span>
+                        <span>25</span>
+                        <span>30</span>
+                        <span>40</span>
+                    </div>
+                    <div id="result-summary">
+                        <p id="healthy-bmi" style="margin-top: 20px;"></p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('bmi-form');
+            const bmiValueEl = document.getElementById('bmi-value');
+            const bmiCategoryEl = document.getElementById('bmi-category');
+            const bmiIndicator = document.getElementById('bmi-indicator');
+            const healthyBmiEl = document.getElementById('healthy-bmi');
+
+            form.addEventListener('submit', calculateBmi);
+
+            function calculateBmi() {
+                const feet = parseFloat(document.getElementById('feet').value) || 0;
+                const inches = parseFloat(document.getElementById('inches').value) || 0;
+                const weight = parseFloat(document.getElementById('kg-indian').value);
+
+                if ((feet > 0 || inches > 0) && weight > 0) {
+                    const heightInMeters = (feet * 12 + inches) * 0.0254;
+                    const bmi = weight / (heightInMeters * heightInMeters);
+                    displayResults(bmi, heightInMeters);
+                } else {
+                    alert("Please enter valid height and weight values.");
+                }
+            }
+
+            function displayResults(bmi, heightInMeters) {
+                const bmiRounded = bmi.toFixed(1);
+                bmiValueEl.textContent = bmiRounded;
+
+                let category = '';
+                let color = '#333';
+
+                if (bmi < 18.5) { category = 'Underweight'; color = '#87CEFA'; } 
+                else if (bmi >= 18.5 && bmi < 25) { category = 'Normal weight'; color = '#32CD32'; }
+                else if (bmi >= 25 && bmi < 30) { category = 'Overweight'; color = '#FFD700'; }
+                else { category = 'Obesity'; color = '#FF4500'; }
+
+                bmiCategoryEl.textContent = category;
+                bmiCategoryEl.style.color = color;
+                
+                const minBmi = 15;
+                const maxBmi = 40;
+                let percent = ((bmi - minBmi) / (maxBmi - minBmi)) * 100;
+                percent = Math.max(0, Math.min(100, percent));
+                bmiIndicator.style.left = `${percent}%`;
+
+                const lowerWeight = (18.5 * (heightInMeters * heightInMeters)).toFixed(1);
+                const upperWeight = (25 * (heightInMeters * heightInMeters)).toFixed(1);
+                
+                healthyBmiEl.innerHTML = `For your height, a healthy weight is between <span>${lowerWeight} kg</span> and <span>${upperWeight} kg</span>.`;
+            }
+        });
+        
+        // --- Theme Toggler Script ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Cost Calculator - VHAST Tools</title>
+    <meta name="description" content="Estimate your daily, monthly, and yearly electricity usage and costs with this advanced calculator.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-bg: #2c3e50;
+            --nav-bg: #34495e;
+            --page-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --accent-color: #f1c40f;
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+        }
+
+        [data-theme="dark"] {
+            --header-bg: #1a1a2e;
+            --nav-bg: #16213e;
+            --page-bg: #0f1624;
+            --card-bg: #1a1a2e;
+            --text-dark: #ffffff;
+            --text-light: #e0e0e0;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* === Header and Navigation === */
+        .header-container {
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .hero-banner {
+            background: var(--header-bg);
+            color: var(--text-light);
+            padding: 20px;
+            text-align: center;
+        }
+        .hero-banner h1 { margin: 0; font-size: 2rem; }
+        .nav-bar {
+            background-color: var(--nav-bg);
+            padding: 15px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-bar a:hover { color: var(--accent-color); }
+        
+        #theme-toggle {
+            background: none; border: 2px solid var(--text-light); color: var(--text-light);
+            font-size: 1.2rem; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        #theme-toggle:hover {
+            background-color: var(--accent-color); border-color: var(--accent-color);
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* === Electricity Calculator === */
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        .calculator-form, .results-display {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); opacity: 0.9;}
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            background: var(--page-bg);
+            color: var(--text-dark);
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        .calculate-button:hover { transform: scale(1.02); }
+
+        .results-display h3 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        .result-item {
+            background: var(--page-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 992px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+/* Features Section */
+        .features-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .feature-item {
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-radius: 12px;
+        }
+
+        .feature-item i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            padding: 100px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover {
+            transform: scale(1.03);
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-right: 30px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .testimonial {
+            background: var(--light-gray);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: var(--white);
+            text-align: center;
+            padding: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="hero-banner">
+            <h1>Electricity Cost Calculator</h1>
+        </div>
+        <nav class="nav-bar">
+            <a href="index.html">Home</a>
+            <a href="Basic_Calculator.html">Calculator</a>
+            <a href="budget_calculator.html">Budget Planner</a>
+            <a href="bmi_calculator.html">BMI Calculator</a>
+            <button id="theme-toggle">🌙</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="calculator-container">
+            <div class="calculator-form">
+                <form name="calform" onsubmit="event.preventDefault(); calculateElectricity();">
+                    <div class="form-group">
+                        <label for="appliance">Select an Appliance</label>
+                        <select name="appliance" id="appliance" onchange="setAppValue(this.value)">
+                           <option value="">Define your own</option>
+                           <optgroup label="House">
+                               <option value="hvac:5:kW:24:hpd:30">Air conditioner (HVAC)</option>
+                               <option value="ac:6000:btu:8:hpd:100">Air conditioner (window unit)</option>
+                               <option value="heater:1500:W:8:hpd:100">Heater (portable)</option>
+                               <option value="fan:25:W:8:hpd:50">Fan (ceiling, table)</option>
+                               <option value="light:7:W:8:hpd:100">Light bulb (LED)</option>
+                           </optgroup>
+                            <optgroup label="Kitchen">
+                               <option value="refrigerator:750:W:24:hpd:20">Refrigerator</option>
+                               <option value="oven:2400:W:1:hpd:50">Electric range/oven</option>
+                               <option value="Microwave:1000:W:10:mpd:75">Microwave oven</option>
+                           </optgroup>
+                           <optgroup label="Other">
+                               <option value="vehicle:10:kW:1.5:hpd:100">Electric vehicle charger</option>
+                               <option value="tv:100:W:2:hpd:80">Television</option>
+                               <option value="computer:150:W:10:hpd:30">Desktop computer</option>
+                               <option value="Laptop:60:W:10:hpd:30">Laptop computer</option>
+                           </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="power">Appliance Power</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" name="power" id="power" value="1000" style="flex: 2;">
+                            <select name="powerunit" id="powerunit" style="flex: 1;">
+                                <option value="W">watt [W]</option>
+                                <option value="kW">kilowatt [kW]</option>
+                                <option value="btu">BTU/hour [BTU/h]</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="usage">Usage</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" name="usage" id="usage" value="24" style="flex: 2;">
+                            <select name="usageunit" id="usageunit" style="flex: 1;">
+                                <option value="mpd">minutes/day</option>
+                                <option value="hpd" selected>hours/day</option>
+                                <option value="hpw">hours/week</option>
+                                <option value="hpm">hours/month</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="price">Electricity Price (per kWh in ₹)</label>
+                        <input type="text" name="price" id="price" value="8.00">
+                    </div>
+                    <input type="submit" value="Calculate" class="calculate-button">
+                </form>
+            </div>
+            <div class="results-display">
+                <h3>Your Estimated Costs</h3>
+                <div class="result-item">
+                    <span>Daily</span>
+                    <span id="daily-cost">₹0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Monthly</span>
+                    <span id="monthly-cost">₹0.00</span>
+                </div>
+                <div class="result-item">
+                    <span>Yearly</span>
+                    <span id="yearly-cost">₹0.00</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        function setAppValue(savIn) {
+            if (savIn !== "") {
+                const appValues = savIn.split(":");
+                if (appValues.length >= 5) {
+                    document.getElementById("power").value = appValues[1];
+                    document.getElementById("powerunit").value = appValues[2];
+                    document.getElementById("usage").value = appValues[3];
+                    document.getElementById("usageunit").value = appValues[4];
+                }
+            }
+        }
+
+        function calculateElectricity() {
+            const power = parseFloat(document.getElementById('power').value) || 0;
+            const powerUnit = document.getElementById('powerunit').value;
+            const usage = parseFloat(document.getElementById('usage').value) || 0;
+            const usageUnit = document.getElementById('usageunit').value;
+            const price = parseFloat(document.getElementById('price').value) || 0;
+
+            let powerInWatts = power;
+            if(powerUnit === 'kW') { powerInWatts = power * 1000; }
+            if(powerUnit === 'btu') { powerInWatts = power * 0.293071; }
+
+            let hoursPerDay = usage;
+            if(usageUnit === 'mpd') { hoursPerDay = usage / 60; }
+            if(usageUnit === 'hpw') { hoursPerDay = usage / 7; }
+            if(usageUnit === 'hpm') { hoursPerDay = usage / 30.44; }
+
+            const dailyConsumptionKWh = (powerInWatts * hoursPerDay) / 1000;
+            const dailyCost = dailyConsumptionKWh * price;
+            const monthlyCost = dailyCost * 30.44;
+            const yearlyCost = dailyCost * 365.25;
+
+            document.getElementById('daily-cost').innerText = `₹${dailyCost.toFixed(2)}`;
+            document.getElementById('monthly-cost').innerText = `₹${monthlyCost.toFixed(2)}`;
+            document.getElementById('yearly-cost').innerText = `₹${yearlyCost.toFixed(2)}`;
+        }
+
+        // --- Theme Toggler Script ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            htmlEl.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            localStorage.setItem('theme', newTheme);
+        });
+        
+        // Initial calculation on load
+        calculateElectricity();
+    </script>
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Use Our Calculator?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Accurate Calculations</h3>
+                    <p>Get precise estimations of your electricity consumption and expenses.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-list"></i>
+                    <h3>Appliance Library</h3>
+                    <p>Choose from a comprehensive list of common household appliances.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Cost Breakdown</h3>
+                    <p>See your estimated costs on a daily, monthly, and yearly basis.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Friendly</h3>
+                    <p>Use our calculator on any device, anytime, anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">As Easy As 1, 2, 3</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h4>Select Your Appliance</h4>
+                    <p>Choose a device from our extensive library or input your own custom values.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h4>Enter Your Usage</h4>
+                    <p>Specify how often you use the appliance to get a tailored estimate.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h4>View Your Results</h4>
+                    <p>Instantly see a breakdown of your projected electricity costs and usage.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="features-grid">
+                <div class="testimonial">
+                    <p>"This calculator is amazing! So easy to use and it helped me identify which appliances were costing me the most. Highly recommended!"</p>
+                    <p><strong>- Sarah J.</strong></p>
+                </div>
+                <div class="testimonial">
+                    <p>"Finally, a straightforward tool to understand my electricity bill. The appliance library is a great feature. I've already made changes to save money."</p>
+                    <p><strong>- Mark T.</strong></p>
+                </div>
+                <div class="testimonial">
+                    <p>"As a homeowner, this is an invaluable tool for managing my budget. The cost breakdown is incredibly helpful for planning my expenses."</p>
+                    <p><strong>- Emily R.</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 ElecTricity Calculator. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
